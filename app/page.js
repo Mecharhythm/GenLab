@@ -179,7 +179,7 @@ function pick(arr) {
 /* =======================
 入力ちょい拾い
 ======================= */
-function getPreview(input: string) {
+function getPreview(input) {
   if (!input) return "";
   const t = input.trim();
   if (!t) return "";
