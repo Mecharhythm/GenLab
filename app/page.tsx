@@ -61,18 +61,18 @@ const blackHistories = [
 ];
 
 /* =======================
-言い訳
+言い訳（修正済み）
 ======================= */
 const excuses = [
-'品質最適化のための非常に高度な戦略的判断です,
-'外部要因の影響を鑑みた結果です',
-'想定内の大遅延です',
-'仕様上の制約です',
-'優先順位調整の一環です'
+`品質最適化のための非常に高度な戦略的判断です`,
+`外部要因の影響を鑑みた結果です`,
+`想定内の大遅延です`,
+`仕様上の制約です`,
+`優先順位調整の一環です`
 ];
 
 /* =======================
-雑レビュー
+雑レビュー（統一）
 ======================= */
 const roasts = [
 `なんか良さそうではあるし
@@ -81,7 +81,8 @@ const roasts = [
 
 知らんけど`,
 
-'一瞬いいと思ったけど どうでもいいかもしれない気もする',
+`一瞬いいと思ったけど
+どうでもいいかもしれない気もする`,
 
 `普通にすごい気はする
 
@@ -95,7 +96,8 @@ const roasts = [
 
 知らんけど`,
 
-'ちゃんとしてるっぽさはありそうな気がする  よく分からんけど',
+`ちゃんとしてるっぽさはありそうな気がする
+よく分からんけど`,
 
 `完成度は高いと思う
 
@@ -103,7 +105,8 @@ const roasts = [
 
 知らんけど`,
 
-'いい感じな気がする 理由？まあ…なんとなく',
+`いい感じな気がする
+理由？まあ…なんとなく`,
 
 `使えば分かるタイプな気がする
 
@@ -170,34 +173,34 @@ const roasts = [
 
 /* ======================= */
 function pick(arr: string[]) {
-return arr[Math.floor(Math.random() * arr.length)];
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 
 /* =======================
 入力ちょい拾い
 ======================= */
 function getPreview(input: string) {
-if (!input) return "";
-const t = input.trim();
-if (!t) return "";
-const len = Math.floor(Math.random() * 7) + 4;
-return t.slice(0, len);
+  if (!input) return "";
+  const t = input.trim();
+  if (!t) return "";
+  const len = Math.floor(Math.random() * 7) + 4;
+  return t.slice(0, len);
 }
 
 function generateRoast(input: string) {
-const base = pick(roasts);
-if (!input || Math.random() < 0.5) return base;
+  const base = pick(roasts);
+  if (!input || Math.random() < 0.5) return base;
 
-return `「${getPreview(input)}...」
+  return `「${getPreview(input)}...」
 
 ${base}`;
 }
 
 function generateExcuse(input: string) {
-const base = pick(excuses);
-if (!input || Math.random() < 0.6) return base;
+  const base = pick(excuses);
+  if (!input || Math.random() < 0.6) return base;
 
-return `「${getPreview(input)}...」については
+  return `「${getPreview(input)}...」については
 
 ${base}`;
 }
@@ -206,101 +209,108 @@ ${base}`;
 UI
 ======================= */
 export default function Page() {
-const [mode, setMode] = useState<"black" | "excuse" | "roast">("black");
-const [input, setInput] = useState("");
-const [result, setResult] = useState("");
-const [copied, setCopied] = useState(false);
+  const [mode, setMode] = useState<"black" | "excuse" | "roast">("black");
+  const [input, setInput] = useState("");
+  const [result, setResult] = useState("");
+  const [copied, setCopied] = useState(false);
 
-const generate = () => {
-if (mode === "black") setResult(pick(blackHistories));
-if (mode === "excuse") setResult(generateExcuse(input));
-if (mode === "roast") setResult(generateRoast(input));
-};
+  const generate = () => {
+    if (mode === "black") setResult(pick(blackHistories));
+    if (mode === "excuse") setResult(generateExcuse(input));
+    if (mode === "roast") setResult(generateRoast(input));
+  };
 
-const copy = async () => {
-await navigator.clipboard.writeText(result);
-setCopied(true);
-setTimeout(() => setCopied(false), 1500);
-};
+  const copy = async () => {
+    await navigator.clipboard.writeText(result);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
 
-const openX = () => {
-const url = https://twitter.com/intent/tweet?text=${encodeURIComponent(result)};
-window.open(url, "_blank");
-};
+  const openX = () => {
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(result)}`;
+    window.open(url, "_blank");
+  };
 
-return (
+  return (
+    <main className="min-h-screen bg-[#ECFDF5] p-6">
+      <div className="max-w-md mx-auto">
 
+        <h1 className="text-2xl font-semibold text-[#052E16] mb-1">
+          GenLab
+        </h1>
+        <p className="text-sm text-[#166534] mb-6">
+          なんかそれっぽい結果が出るやつ
+        </p>
 
-    <h1 className="text-2xl font-semibold text-[#052E16] mb-1">
-      GenLab
-    </h1>
-    <p className="text-sm text-[#166534] mb-6">
-      なんかそれっぽい結果が出るやつ
-    </p>
+        {/* モード切替 */}
+        <div className="flex gap-2 mb-4">
+          {[
+            { key: "black", label: "黒歴史" },
+            { key: "excuse", label: "言い訳" },
+            { key: "roast", label: "雑レビュー" }
+          ].map((m) => (
+            <button
+              key={m.key}
+              onClick={() => setMode(m.key as any)}
+              className={`flex-1 py-2 rounded border text-sm ${
+                mode === m.key
+                  ? "bg-[#10B981] text-white"
+                  : "bg-white border-[#BBF7D0]"
+              }`}
+            >
+              {m.label}
+            </button>
+          ))}
+        </div>
 
-    {/* モード切替 */}
-    <div className="flex gap-2 mb-4">
-      {[
-        { key: "black", label: "黒歴史" },
-        { key: "excuse", label: "言い訳" },
-        { key: "roast", label: "雑レビュー" }
-      ].map((m) => (
+        {/* 入力欄 */}
+        {mode !== "black" && (
+          <textarea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder={
+              mode === "excuse"
+                ? "何に対する言い訳か一応書ける"
+                : "レビューしてほしい内容（多分読まれない）"
+            }
+            className="w-full p-3 mb-4 rounded-lg border border-[#BBF7D0]"
+          />
+        )}
+
+        {/* 生成 */}
         <button
-          key={m.key}
-          onClick={() => setMode(m.key as any)}
-          className={`flex-1 py-2 rounded border text-sm ${
-            mode === m.key
-              ? "bg-[#10B981] text-white"
-              : "bg-white border-[#BBF7D0]"
-          }`}
+          onClick={generate}
+          className="w-full bg-[#10B981] text-white py-3 rounded-lg"
         >
-          {m.label}
+          生成する
         </button>
-      ))}
-    </div>
 
-    {/* 入力欄 */}
-    {mode !== "black" && (
-      <textarea
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder={
-          mode === "excuse"
-            ? "何に対する言い訳か一応書ける"
-            : "レビューしてほしい内容（多分読まれない）"
-        }
-        className="w-full p-3 mb-4 rounded-lg border border-[#BBF7D0]"
-      />
-    )}
+        {/* 結果 */}
+        {result && (
+          <div className="mt-6">
+            <div className="p-5 text-white whitespace-pre-line bg-gradient-to-br from-[#10B981] to-[#34D399] rounded-xl">
+              {result}
+            </div>
 
-    {/* 生成 */}
-    <button
-      onClick={generate}
-      className="w-full bg-[#10B981] text-white py-3 rounded-lg"
-    >
-      生成する
-    </button>
+            <div className="flex gap-2 mt-3">
+              <button
+                onClick={copy}
+                className="flex-1 bg-[#10B981] text-white py-2 rounded"
+              >
+                {copied ? "コピーした" : "コピー"}
+              </button>
 
-    {/* 結果 */}
-    {result && (
-      <div className="mt-6">
-        <div className="p-5 text-white whitespace-pre-line bg-gradient-to-br from-[#10B981] to-[#34D399] rounded-xl">
-          {result}
-        </div>
+              <button
+                onClick={openX}
+                className="flex-1 border py-2 rounded"
+              >
+                Xで開く
+              </button>
+            </div>
+          </div>
+        )}
 
-        <div className="flex gap-2 mt-3">
-          <button onClick={copy} className="flex-1 bg-[#10B981] text-white py-2 rounded">
-            {copied ? "コピーした" : "コピー"}
-          </button>
-
-          <button onClick={openX} className="flex-1 border py-2 rounded">
-            Xで開く
-          </button>
-        </div>
       </div>
-    )}
-
-  </div>
-</main>
-);
+    </main>
+  );
 }
