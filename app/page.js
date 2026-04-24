@@ -251,7 +251,7 @@ export default function Page() {
           ].map((m) => (
             <button
               key={m.key}
-              onClick={() => setMode(m.key as any)}
+              onClick={() => setMode(m.key)}
               className={`flex-1 py-2 rounded border text-sm ${
                 mode === m.key
                   ? "bg-[#10B981] text-white"
