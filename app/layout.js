@@ -11,7 +11,6 @@ export default function RootLayout({ children }) {
   );
 }
   export default function RootLayout({ children }) {
-}) {
   return (
     <html lang="ja">
       <body>{children}</body>
