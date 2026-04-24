@@ -196,7 +196,7 @@ function generateRoast(input) {
 ${base}`;
 }
 
-function generateExcuse(input: string) {
+function generateExcuse(input) {
   const base = pick(excuses);
   if (!input || Math.random() < 0.6) return base;
 
