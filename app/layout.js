@@ -3,9 +3,13 @@ export const metadata = {
   description: "なんかそれっぽい結果が出るやつ",
 };
 
-export default function RootLayout({
-  children,
-}: {
+export default function RootLayout({ children }) {
+  return (
+    <html lang="ja">
+      <body>{children}</body>
+    </html>
+  );
+}
   export default function RootLayout({ children }) {
 }) {
   return (
