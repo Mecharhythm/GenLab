@@ -187,7 +187,7 @@ function getPreview(input) {
   return t.slice(0, len);
 }
 
-function generateRoast(input: string) {
+function generateRoast(input) {
   const base = pick(roasts);
   if (!input || Math.random() < 0.5) return base;
 
