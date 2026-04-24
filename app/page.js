@@ -172,7 +172,7 @@ const roasts = [
 ];
 
 /* ======================= */
-function pick(arr: string[]) {
+function pick(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
@@ -209,7 +209,7 @@ ${base}`;
 UI
 ======================= */
 export default function Page() {
-  const [mode, setMode] = useState<"black" | "excuse" | "roast">("black");
+  const [mode, setMode] = useState("black");
   const [input, setInput] = useState("");
   const [result, setResult] = useState("");
   const [copied, setCopied] = useState(false);
