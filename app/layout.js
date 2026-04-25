@@ -1,8 +1,9 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "GenLab",
-  description: "遊び心のある文章を、配慮を持って生成する小さなテキスト実験室",
+  title: "GenLab — ネタ文章の実験室",
+  description:
+    "黒歴史メーカー・言い訳・くそ雑レビュー。遊び心と配慮を両立するテンプレートベースのテキスト生成ツール。",
 };
 
 export default function RootLayout({ children }) {
