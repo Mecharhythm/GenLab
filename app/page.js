@@ -1,317 +1,246 @@
 "use client";
-import { useState } from "react";
 
-/* =======================
-黒歴史（フル）
-======================= */
-const blackHistories = [
-`あなたの黒歴史
+import { useMemo, useState } from "react";
 
-特異点として世界線に干渉した
-
-別に何も変わってはない`,
-
-`あなたの黒歴史
-
-プロトコル違反で力が制限されてる状態だと思ってた
-
-元々何もできない`,
-
-`あなたの黒歴史
-
-上位存在に監視されてると思い生活してた
-
-特に誰も見てない`,
-
-`あなたの黒歴史
-
-コードネーム“Eclipse”として裏で動いてた
-
-誰にも呼ばれてない`,
-
-`あなたの黒歴史
-
-能力の解放条件を満たしてないだけだと思ってた
-
-能力なんてない`,
-
-`あなたの黒歴史
-
-観測されると能力が制限されるタイプだった
-
-別に変わらない`,
-
-`あなたの黒歴史
-
-この世界は再構築される前提で動いてた
-
-されてない`,
-
-`あなたの黒歴史
-
-選ばれし｢例外｣だった
-
-全くそんなことはない`,
-
-`あなたの黒歴史
-
-全ての事象には裏ログがあると理解していた
-
-ない`
+const MODES = [
+  {
+    key: "story",
+    label: "黒歴史メーカー",
+    accent: "mode-story",
+    title: "盛りすぎた思い出を、フィクションとして整える",
+    description:
+      "誇張された過去エピソードを、ネタとして軽く楽しめる文章にします。実在の人物名や団体名は入れない前提です。",
+    placeholder: "例: 中学の文化祭でギターを弾こうとして失敗した",
+  },
+  {
+    key: "excuse",
+    label: "やわらか言い換え",
+    accent: "mode-excuse",
+    title: "角を立てずに事情を伝える",
+    description:
+      "遅刻や返信遅れなどを、言い訳ではなくやわらかい説明文として整えます。",
+    placeholder: "例: 返信が遅くなった / 締切に少し遅れそう",
+  },
+  {
+    key: "tease",
+    label: "軽口ジェネレーター",
+    accent: "mode-tease",
+    title: "攻撃ではなく、冗談で返す",
+    description:
+      "相手を傷つけにくい、軽めのツッコミ文を作ります。個人攻撃や差別的な内容は出さない方針です。",
+    placeholder: "例: いつも準備がギリギリ / 机の上だけ異世界",
+  },
 ];
 
-/* =======================
-言い訳（修正済み）
-======================= */
-const excuses = [
-`品質最適化のための非常に高度な戦略的判断です`,
-`外部要因の影響を鑑みた結果です`,
-`想定内の大遅延です`,
-`仕様上の制約です`,
-`優先順位調整の一環です`
+const storyTemplates = [
+  "あのときの私は、{preview}だけで人生の主役になれると本気で信じていた。今思うと勢いだけは完璧だった。",
+  "{preview}の件、当時は伝説の始まりだと思っていたけれど、今なら穏やかに黒歴史フォルダへ保存できる。",
+  "{preview}をやった日の自分、自己評価だけは世界大会クラスだった。反省より先に懐かしさがくるタイプの思い出。",
+  "昔の私は{preview}で空気を変えられると思っていた。結果として変わったのは周囲の表情だった。",
+  "{preview}に全力投球していた頃の自分へ。熱量は本物だったし、今見ると少しだけ愛おしい。",
 ];
 
-/* =======================
-雑レビュー（統一）
-======================= */
-const roasts = [
-`なんか良さそうではあるし
-
-多分だれかは使いそう
-
-知らんけど`,
-
-`一瞬いいと思ったけど
-どうでもいいかもしれない気もする`,
-
-`普通にすごい気はする
-
-気はするだけだし
-
-知らんけど`,
-
-`これ好きな人は好きそう
-
-自分ではない
-
-知らんけど`,
-
-`ちゃんとしてるっぽさはありそうな気がする
-よく分からんけど`,
-
-`完成度は高いと思う
-
-だから何って感じもする
-
-知らんけど`,
-
-`いい感じな気がする
-理由？まあ…なんとなく`,
-
-`使えば分かるタイプな気がする
-
-別に使わないけど`,
-
-`なんか惜しい
-
-何がかは分からない`,
-
-`見た目はいい
-
-それ以外は知らない`,
-
-`一応いいと思う
-
-一応ね
-
-知らんけど`,
-
-`嫌いじゃない
-
-でも好きでもない
-
-知らんけど`,
-
-`よくできてる気がする
-
-ちゃんとは見てないけど`,
-
-`方向性は合ってると思う
-
-勘だけど`,
-
-`これハマる人いると思う
-
-多分遠くに`,
-
-`俺一回見たら満足するタイプだから
-
-まあいいんじゃね
-
-知らんけど`,
-
-`なんか前にも見た気がする
-
-思い出せないけど`,
-
-`悪くはない
-
-よくもない
-
-まぁいいんじゃね
-
-知らんけど`,
-
-`こういうのもいいのかもしれない
-
-知らんけど`,
-
-`とりあえず行けてる感はある
-
-知らんけど`
+const excuseTemplates = [
+  "{preview}の件、確認に少し時間がかかっていました。お待たせしてしまいすみません。",
+  "{preview}については、急ぎつつも正確さを優先していました。共有が遅れてしまって失礼しました。",
+  "{preview}の対応を進めていたため、ご連絡が後ろ倒しになりました。ここから巻き返します。",
+  "{preview}に想定より時間を使ってしまい、反応が遅くなりました。以後は先に一報を入れます。",
+  "{preview}を優先していた影響で遅れが出ました。ご迷惑をおかけした分、次の動きは早めます。",
 ];
 
-/* ======================= */
-function pick(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
+const teaseTemplates = [
+  "{preview}って、もはや様式美なんですよね。毎回ちょっとだけ期待してしまう。",
+  "{preview}の安定感、逆に才能かもしれません。ここまで来ると芸風です。",
+  "{preview}を見るたびに、時間の流れって自由なんだなと思わされます。",
+  "{preview}、雑さではなく独自の美学として受け取ると急に味が出ますね。",
+  "{preview}の破壊力、怒るより先に笑ってしまうちょうどよさがあります。",
+];
 
-/* =======================
-入力ちょい拾い
-======================= */
+const blockedTerms = [
+  "殺",
+  "死",
+  "自殺",
+  "暴力",
+  "レイプ",
+  "差別",
+  "障害者",
+  "黒人",
+  "白人",
+  "住所",
+  "電話",
+  "学校名",
+  "会社名",
+  "@",
+  "http://",
+  "https://",
+];
+
 function getPreview(input) {
-  if (!input) return "";
-  const t = input.trim();
-  if (!t) return "";
-  const len = Math.floor(Math.random() * 7) + 4;
-  return t.slice(0, len);
+  return input.trim().replace(/\s+/g, " ").slice(0, 36);
 }
 
-function generateRoast(input) {
-  const base = pick(roasts);
-  if (!input || Math.random() < 0.5) return base;
-
-  return `「${getPreview(input)}...」
-
-${base}`;
+function containsBlockedTerm(input) {
+  return blockedTerms.some((term) => input.includes(term));
 }
 
-function generateExcuse(input) {
-  const base = pick(excuses);
-  if (!input || Math.random() < 0.6) return base;
-
-  return `「${getPreview(input)}...」については
-
-${base}`;
+function detectPersonalInfo(input) {
+  const hasPhone = /\d{2,4}-\d{2,4}-\d{3,4}/.test(input);
+  const hasLongNumber = /\d{7,}/.test(input);
+  return hasPhone || hasLongNumber;
 }
 
-/* =======================
-UI
-======================= */
+function pickRandom(list) {
+  return list[Math.floor(Math.random() * list.length)];
+}
+
+function buildResult(mode, input) {
+  const preview = getPreview(input || "うまく言葉にしづらい出来事");
+  const map = {
+    story: storyTemplates,
+    excuse: excuseTemplates,
+    tease: teaseTemplates,
+  };
+
+  return pickRandom(map[mode]).replaceAll("{preview}", preview);
+}
+
 export default function Page() {
-  const [mode, setMode] = useState("black");
+  const [mode, setMode] = useState("story");
   const [input, setInput] = useState("");
   const [result, setResult] = useState("");
   const [copied, setCopied] = useState(false);
+  const [warning, setWarning] = useState("");
 
-  const generate = () => {
-    if (mode === "black") setResult(pick(blackHistories));
-    if (mode === "excuse") setResult(generateExcuse(input));
-    if (mode === "roast") setResult(generateRoast(input));
+  const currentMode = useMemo(
+    () => MODES.find((item) => item.key === mode) ?? MODES[0],
+    [mode],
+  );
+
+  const handleGenerate = () => {
+    const trimmed = input.trim();
+
+    if (!trimmed) {
+      setWarning("短い状況説明を入れると、自然な文章になりやすいです。");
+      setResult(buildResult(mode, ""));
+      return;
+    }
+
+    if (detectPersonalInfo(trimmed) || containsBlockedTerm(trimmed)) {
+      setWarning(
+        "個人情報や攻撃的な表現が含まれる可能性があるため、そのままでは生成しません。内容をぼかして入力してください。",
+      );
+      setResult("");
+      return;
+    }
+
+    setWarning("");
+    setResult(buildResult(mode, trimmed));
   };
 
-  const copy = async () => {
+  const handleCopy = async () => {
+    if (!result) return;
+
     await navigator.clipboard.writeText(result);
     setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
+    window.setTimeout(() => setCopied(false), 1500);
   };
 
-  const openX = () => {
+  const handlePost = () => {
+    if (!result) return;
+
     const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(result)}`;
-    window.open(url, "_blank");
+    window.open(url, "_blank", "noopener,noreferrer");
   };
 
   return (
-  <main className="min-h-screen bg-gradient-to-br from-[#022C22] via-[#064E3B] to-[#021412] flex items-center justify-center p-4">
-    <div className="w-full max-w-md bg-[#031B16]/80 backdrop-blur-xl border border-[#065F46] rounded-2xl shadow-2xl p-6">
-
-      {/* タイトル */}
-      <h1 className="text-2xl font-bold text-[#6EE7B7] tracking-wide">
-        GenLab
-      </h1>
-      <p className="text-xs text-[#34D399] mt-1 opacity-80">
-        なんかそれっぽい結果が出るやつ
-      </p>
-
-      {/* モード切替 */}
-      <div className="flex gap-2 mt-6">
-        {[
-          { key: "black", label: "黒歴史" },
-          { key: "excuse", label: "言い訳" },
-          { key: "roast", label: "雑レビュー" }
-        ].map((m) => (
-          <button
-            key={m.key}
-            onClick={() => setMode(m.key)}
-            className={`flex-1 py-2 rounded-lg text-sm border transition-all duration-200 ${
-              mode === m.key
-                ? "bg-[#10B981] text-black border-[#10B981] shadow-lg shadow-green-500/30"
-                : "bg-transparent text-[#6EE7B7] border-[#065F46] hover:bg-[#064E3B]"
-            }`}
-          >
-            {m.label}
-          </button>
-        ))}
-      </div>
-
-      {/* 入力欄 */}
-      {mode !== "black" && (
-        <textarea
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder={
-            mode === "excuse"
-              ? "何に対する言い訳か一応書ける"
-              : "レビューしてほしい内容（多分読まれない）"
-          }
-          className="w-full mt-4 p-3 rounded-lg bg-[#022C22] border border-[#065F46] text-[#D1FAE5] placeholder:text-[#065F46] focus:outline-none focus:ring-2 focus:ring-[#10B981]"
-        />
-      )}
-
-      {/* 生成ボタン */}
-      <button
-        onClick={generate}
-        className="w-full mt-4 bg-gradient-to-r from-[#10B981] to-[#34D399] hover:opacity-90 text-black py-3 rounded-lg font-semibold tracking-wide shadow-lg shadow-green-500/30"
-      >
-        生成する
-      </button>
-
-      {/* 結果 */}
-      {result && (
-        <div className="mt-6">
-          <div className="p-5 text-[#D1FAE5] whitespace-pre-line bg-[#021412] border border-[#065F46] rounded-xl shadow-inner text-sm leading-relaxed">
-            {result}
-          </div>
-
-          <div className="flex gap-2 mt-3">
-            <button
-              onClick={copy}
-              className="flex-1 bg-[#10B981] hover:bg-[#059669] text-black py-2 rounded-lg font-medium"
-            >
-              {copied ? "コピーした" : "コピー"}
-            </button>
-
-            <button
-              onClick={openX}
-              className="flex-1 border border-[#065F46] text-[#6EE7B7] py-2 rounded-lg hover:bg-[#064E3B]"
-            >
-              Xで開く
-            </button>
-          </div>
+    <main className="page-shell">
+      <section className="hero-card">
+        <div className="hero-copy">
+          <p className="eyebrow">Creative text lab</p>
+          <h1>GenLab</h1>
+          <p className="lead">
+            ネタ文章をつくる小さな実験室。遊び心は残しつつ、実在の誰かを傷つけにくい出力に寄せています。
+          </p>
         </div>
-      )}
 
-    </div>
-  </main>
-);
+        <div className="hero-panel">
+          <p className="panel-label">Safety note</p>
+          <ul className="safety-list">
+            <li>実名、連絡先、学校名や会社名は入れない</li>
+            <li>誹謗中傷や差別的な表現には使わない</li>
+            <li>公開前に自分で文面を確認する</li>
+          </ul>
+        </div>
+      </section>
+
+      <section className="workspace-card">
+        <div className="mode-grid" role="tablist" aria-label="generation modes">
+          {MODES.map((item) => (
+            <button
+              key={item.key}
+              type="button"
+              className={`mode-button ${mode === item.key ? `${item.accent} active` : ""}`}
+              onClick={() => {
+                setMode(item.key);
+                setWarning("");
+              }}
+              aria-pressed={mode === item.key}
+            >
+              <span>{item.label}</span>
+            </button>
+          ))}
+        </div>
+
+        <div className="mode-copy">
+          <h2>{currentMode.title}</h2>
+          <p>{currentMode.description}</p>
+        </div>
+
+        <label className="input-label" htmlFor="prompt">
+          元になる状況
+        </label>
+        <textarea
+          id="prompt"
+          className="prompt-input"
+          value={input}
+          onChange={(event) => setInput(event.target.value)}
+          placeholder={currentMode.placeholder}
+          maxLength={140}
+        />
+
+        <div className="toolbar">
+          <p className="char-count">{input.trim().length}/140</p>
+          <button type="button" className="primary-button" onClick={handleGenerate}>
+            文章をつくる
+          </button>
+        </div>
+
+        {warning ? <p className="warning-box">{warning}</p> : null}
+
+        <div className="result-card" aria-live="polite">
+          <p className="result-label">生成結果</p>
+          <p className="result-text">
+            {result || "ここに生成結果が表示されます。入力がなくても試作文は出せます。"}
+          </p>
+        </div>
+
+        <div className="action-row">
+          <button type="button" className="secondary-button" onClick={handleCopy} disabled={!result}>
+            {copied ? "コピーしました" : "コピー"}
+          </button>
+          <button type="button" className="secondary-button" onClick={handlePost} disabled={!result}>
+            X に下書きを開く
+          </button>
+        </div>
+
+        <div className="notice-card">
+          <p className="result-label">利用上の注意</p>
+          <p className="notice-text">
+            これは創作補助ツールです。実在の個人や団体を特定できる文面、名誉を傷つける表現、差別的な表現、虚偽の断定表現には使わないでください。
+            公開前に必ず内容を見直してください。
+          </p>
+        </div>
+      </section>
+    </main>
+  );
 }
