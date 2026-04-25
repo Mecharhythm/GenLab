@@ -232,85 +232,85 @@ export default function Page() {
   };
 
   return (
-    <main className="min-h-screen bg-[#ECFDF5] p-6">
-      <div className="max-w-md mx-auto">
+  <main className="min-h-screen bg-[#ECFDF5] flex items-center justify-center p-4">
+    <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-6">
 
-        <h1 className="text-2xl font-semibold text-[#052E16] mb-1">
-          GenLab
-        </h1>
-        <p className="text-sm text-[#166534] mb-6">
-          なんかそれっぽい結果が出るやつ
-        </p>
+      {/* タイトル */}
+      <h1 className="text-xl font-semibold text-[#065F46]">
+        GenLab
+      </h1>
+      <p className="text-sm text-[#6EE7B7] mt-1">
+        なんかそれっぽい結果が出るやつ
+      </p>
 
-        {/* モード切替 */}
-        <div className="flex gap-2 mb-4">
-          {[
-            { key: "black", label: "黒歴史" },
-            { key: "excuse", label: "言い訳" },
-            { key: "roast", label: "雑レビュー" }
-          ].map((m) => (
-            <button
-              key={m.key}
-              onClick={() => setMode(m.key)}
-              className={`flex-1 py-2 rounded border text-sm ${
-                mode === m.key
-                  ? "bg-[#10B981] text-white"
-                  : "bg-white border-[#BBF7D0]"
-              }`}
-            >
-              {m.label}
-            </button>
-          ))}
-        </div>
-
-        {/* 入力欄 */}
-        {mode !== "black" && (
-          <textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder={
-              mode === "excuse"
-                ? "何に対する言い訳か一応書ける"
-                : "レビューしてほしい内容（多分読まれない）"
-            }
-            className="w-full p-3 mb-4 rounded-lg border border-[#BBF7D0]"
-          />
-        )}
-
-        {/* 生成 */}
-        <button
-          onClick={generate}
-          className="w-full bg-[#10B981] text-white py-3 rounded-lg"
-        >
-          生成する
-        </button>
-
-        {/* 結果 */}
-        {result && (
-          <div className="mt-6">
-            <div className="p-5 text-white whitespace-pre-line bg-gradient-to-br from-[#10B981] to-[#34D399] rounded-xl">
-              {result}
-            </div>
-
-            <div className="flex gap-2 mt-3">
-              <button
-                onClick={copy}
-                className="flex-1 bg-[#10B981] text-white py-2 rounded"
-              >
-                {copied ? "コピーした" : "コピー"}
-              </button>
-
-              <button
-                onClick={openX}
-                className="flex-1 border py-2 rounded"
-              >
-                Xで開く
-              </button>
-            </div>
-          </div>
-        )}
-
+      {/* モード切替 */}
+      <div className="flex gap-2 mt-5">
+        {[
+          { key: "black", label: "黒歴史" },
+          { key: "excuse", label: "言い訳" },
+          { key: "roast", label: "雑レビュー" }
+        ].map((m) => (
+          <button
+            key={m.key}
+            onClick={() => setMode(m.key)}
+            className={`flex-1 py-2 rounded-lg text-sm transition ${
+              mode === m.key
+                ? "bg-[#10B981] text-white"
+                : "bg-gray-100 text-gray-600"
+            }`}
+          >
+            {m.label}
+          </button>
+        ))}
       </div>
-    </main>
-  );
-}
+
+      {/* 入力欄 */}
+      {mode !== "black" && (
+        <textarea
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder={
+            mode === "excuse"
+              ? "何に対する言い訳か一応書ける"
+              : "レビューしてほしい内容（多分読まれない）"
+          }
+          className="w-full mt-4 p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#10B981]"
+        />
+      )}
+
+      {/* 生成ボタン */}
+      <button
+        onClick={generate}
+        className="w-full mt-4 bg-[#10B981] hover:bg-[#059669] text-white py-3 rounded-lg font-semibold transition"
+      >
+        生成する
+      </button>
+
+      {/* 結果 */}
+      {result && (
+        <div className="mt-6">
+          <div className="p-5 text-white whitespace-pre-line bg-gradient-to-br from-[#10B981] to-[#34D399] rounded-xl shadow-md text-sm leading-relaxed">
+            {result}
+          </div>
+
+          <div className="flex gap-2 mt-3">
+            <button
+              onClick={copy}
+              className="flex-1 bg-[#10B981] text-white py-2 rounded-lg"
+            >
+              {copied ? "コピーした" : "コピー"}
+            </button>
+
+            <button
+              onClick={openX}
+              className="flex-1 border border-gray-200 py-2 rounded-lg"
+            >
+              Xで開く
+            </button>
+          </div>
+        </div>
+      )}
+
+    </div>
+  </main>
+);
