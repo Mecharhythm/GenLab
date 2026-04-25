@@ -232,19 +232,19 @@ export default function Page() {
   };
 
   return (
-  <main className="min-h-screen bg-[#ECFDF5] flex items-center justify-center p-4">
-    <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-6">
+  <main className="min-h-screen bg-gradient-to-br from-[#022C22] via-[#064E3B] to-[#021412] flex items-center justify-center p-4">
+    <div className="w-full max-w-md bg-[#031B16]/80 backdrop-blur-xl border border-[#065F46] rounded-2xl shadow-2xl p-6">
 
       {/* タイトル */}
-      <h1 className="text-xl font-semibold text-[#065F46]">
+      <h1 className="text-2xl font-bold text-[#6EE7B7] tracking-wide">
         GenLab
       </h1>
-      <p className="text-sm text-[#6EE7B7] mt-1">
+      <p className="text-xs text-[#34D399] mt-1 opacity-80">
         なんかそれっぽい結果が出るやつ
       </p>
 
       {/* モード切替 */}
-      <div className="flex gap-2 mt-5">
+      <div className="flex gap-2 mt-6">
         {[
           { key: "black", label: "黒歴史" },
           { key: "excuse", label: "言い訳" },
@@ -253,10 +253,10 @@ export default function Page() {
           <button
             key={m.key}
             onClick={() => setMode(m.key)}
-            className={`flex-1 py-2 rounded-lg text-sm transition ${
+            className={`flex-1 py-2 rounded-lg text-sm border transition-all duration-200 ${
               mode === m.key
-                ? "bg-[#10B981] text-white"
-                : "bg-gray-100 text-gray-600"
+                ? "bg-[#10B981] text-black border-[#10B981] shadow-lg shadow-green-500/30"
+                : "bg-transparent text-[#6EE7B7] border-[#065F46] hover:bg-[#064E3B]"
             }`}
           >
             {m.label}
@@ -274,14 +274,14 @@ export default function Page() {
               ? "何に対する言い訳か一応書ける"
               : "レビューしてほしい内容（多分読まれない）"
           }
-          className="w-full mt-4 p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#10B981]"
+          className="w-full mt-4 p-3 rounded-lg bg-[#022C22] border border-[#065F46] text-[#D1FAE5] placeholder:text-[#065F46] focus:outline-none focus:ring-2 focus:ring-[#10B981]"
         />
       )}
 
       {/* 生成ボタン */}
       <button
         onClick={generate}
-        className="w-full mt-4 bg-[#10B981] hover:bg-[#059669] text-white py-3 rounded-lg font-semibold transition"
+        className="w-full mt-4 bg-gradient-to-r from-[#10B981] to-[#34D399] hover:opacity-90 text-black py-3 rounded-lg font-semibold tracking-wide shadow-lg shadow-green-500/30"
       >
         生成する
       </button>
@@ -289,21 +289,21 @@ export default function Page() {
       {/* 結果 */}
       {result && (
         <div className="mt-6">
-          <div className="p-5 text-white whitespace-pre-line bg-gradient-to-br from-[#10B981] to-[#34D399] rounded-xl shadow-md text-sm leading-relaxed">
+          <div className="p-5 text-[#D1FAE5] whitespace-pre-line bg-[#021412] border border-[#065F46] rounded-xl shadow-inner text-sm leading-relaxed">
             {result}
           </div>
 
           <div className="flex gap-2 mt-3">
             <button
               onClick={copy}
-              className="flex-1 bg-[#10B981] text-white py-2 rounded-lg"
+              className="flex-1 bg-[#10B981] hover:bg-[#059669] text-black py-2 rounded-lg font-medium"
             >
               {copied ? "コピーした" : "コピー"}
             </button>
 
             <button
               onClick={openX}
-              className="flex-1 border border-gray-200 py-2 rounded-lg"
+              className="flex-1 border border-[#065F46] text-[#6EE7B7] py-2 rounded-lg hover:bg-[#064E3B]"
             >
               Xで開く
             </button>
@@ -313,5 +313,4 @@ export default function Page() {
 
     </div>
   </main>
-  );
-}
+);
