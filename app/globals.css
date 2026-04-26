@@ -13,7 +13,7 @@
   --card-hover:    rgba(16, 26, 52, 0.9);
   --line:          rgba(140, 160, 255, 0.12);
   --line-bright:   rgba(140, 160, 255, 0.25);
-  --text:          #eef2ff;
+  --text:          #2a1208;
   --text-sub:      #c0c9e6;
   --muted:         #8892b3;
   --accent:        #6ee7b7;
@@ -69,7 +69,7 @@ body::before {
     radial-gradient(ellipse 60% 50% at 15% 5%, rgba(110, 231, 183, 0.10), transparent),
     radial-gradient(ellipse 50% 45% at 85% 10%, rgba(167, 139, 250, 0.10), transparent),
     radial-gradient(ellipse 40% 35% at 50% 90%, rgba(251, 191, 96, 0.04), transparent),
-    linear-gradient(175deg, #060c1a 0%, #0e1629 40%, #080e1e 100%);
+    linear-gradient(175deg, #060c1a 0%, #0e1629 40%, #e8cfc6 100%);
 }
 
 button, textarea, input {
