@@ -61,16 +61,9 @@ body {
 }
 
 body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background:
-    radial-gradient(ellipse 60% 50% at 15% 5%, rgba(110, 231, 183, 0.10), transparent),
-    radial-gradient(ellipse 50% 45% at 85% 10%, rgba(167, 139, 250, 0.10), transparent),
-    radial-gradient(ellipse 40% 35% at 50% 90%, rgba(251, 191, 96, 0.04), transparent),
-    linear-gradient(175deg, #060c1a 0%, #0e1629 40%, #e8cfc6 100%);
+  display: none;
 }
+
 
 button, textarea, input {
   font: inherit;
