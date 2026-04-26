@@ -45,6 +45,7 @@
 }
 
 html {
+  background: #e8cfc6;
   min-height: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
