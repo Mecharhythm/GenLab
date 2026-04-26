@@ -108,7 +108,7 @@ export default function Page() {
 
   return (
     <>
-      <style>{@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Noto+Sans+JP:wght@300;400;500&family=Space+Mono&display=swap'); *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; } body { font-family: 'Noto Sans JP', sans-serif; background: #e8cfc6; } .hero { background: #a03c28; padding: 40px; color: white; } .body { max-width: 520px; margin: auto; padding: 24px; } .btn-generate { width: 100%; padding: 12px; margin-top: 10px; } .result-box { margin-top: 20px; padding: 16px; background: #fff; }      }</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Noto+Sans+JP:wght@300;400;500&family=Space+Mono&display=swap'); *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; } body { font-family: 'Noto Sans JP', sans-serif; background: #e8cfc6; } .hero { background: #a03c28; padding: 40px; color: white; } .body { max-width: 520px; margin: auto; padding: 24px; } .btn-generate { width: 100%; padding: 12px; margin-top: 10px; } .result-box { margin-top: 20px; padding: 16px; background: #fff; }`}</style>
 
       <div className="hero">
         <h1>GenLab</h1>
