@@ -93,7 +93,7 @@ export default function Page() {
   };
 
   const openX = () => window.open(
-    `https://twitter.com/intent/tweet?text=${encodeURIComponent(result)}`, "_blank"
+    `https://twitter.com/intent/tweet?text=${encodeURIComponent(result + "\n\nhttps://gen-lab-mecha.vercel.app")}`, "_blank"
   );
 
   return (
