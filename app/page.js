@@ -1,5 +1,5 @@
 "use client";
-import { useState } from “react”;
+import { useState } from "react";
 
 const blackHistories = [
 `あなたの黒歴史\n\n特異点として世界線に干渉した\n\n別に何も変わってはない`,
