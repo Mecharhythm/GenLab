@@ -1,7 +1,7 @@
 import "./globals.css";
 
 export const metadata = {
-title: "GenLab — ネタ文章の実験室”,
+title: "GenLab － 人工無能による謎文章生成サイト",
 description:
 "黒歴史メーカー・言い訳・くそ雑レビュー。テンプレートベースのテキスト生成ツール。”,
 };
