@@ -49,7 +49,7 @@ return arr[Math.floor(Math.random() * arr.length)];
 }
 function getPreview(input) {
 const t = input.trim();
-if (!t) return “”;
+if (!t) return "";
 return t.slice(0, Math.floor(Math.random() * 7) + 4);
 }
 function generateRoast(input) {
